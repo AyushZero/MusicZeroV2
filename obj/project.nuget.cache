@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "TQFBoE3d0Wo=",
+  "success": true,
+  "projectFilePath": "Z:\\Development\\WPF\\MusicZeroV2\\MusicZeroV2.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\ayush\\.nuget\\packages\\microsoft.netframework.referenceassemblies\\1.0.3\\microsoft.netframework.referenceassemblies.1.0.3.nupkg.sha512",
+    "C:\\Users\\ayush\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net48\\1.0.3\\microsoft.netframework.referenceassemblies.net48.1.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

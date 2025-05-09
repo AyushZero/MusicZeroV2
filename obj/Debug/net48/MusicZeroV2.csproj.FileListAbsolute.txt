@@ -1,0 +1,16 @@
+Z:\Development\WPF\MusicZeroV2\obj\Debug\net48\MusicZeroV2.csproj.AssemblyReference.cache
+Z:\Development\WPF\MusicZeroV2\obj\Debug\net48\MainWindow.g.cs
+Z:\Development\WPF\MusicZeroV2\obj\Debug\net48\GeneratedInternalTypeHelper.g.cs
+Z:\Development\WPF\MusicZeroV2\obj\Debug\net48\MusicZeroV2_MarkupCompile.cache
+Z:\Development\WPF\MusicZeroV2\bin\Debug\net48\MusicZeroV2.exe.config
+Z:\Development\WPF\MusicZeroV2\bin\Debug\net48\MusicZeroV2.exe
+Z:\Development\WPF\MusicZeroV2\bin\Debug\net48\MusicZeroV2.pdb
+Z:\Development\WPF\MusicZeroV2\obj\Debug\net48\App.g.cs
+Z:\Development\WPF\MusicZeroV2\obj\Debug\net48\MainWindow.baml
+Z:\Development\WPF\MusicZeroV2\obj\Debug\net48\MusicZeroV2.g.resources
+Z:\Development\WPF\MusicZeroV2\obj\Debug\net48\MusicZeroV2.GeneratedMSBuildEditorConfig.editorconfig
+Z:\Development\WPF\MusicZeroV2\obj\Debug\net48\MusicZeroV2.AssemblyInfoInputs.cache
+Z:\Development\WPF\MusicZeroV2\obj\Debug\net48\MusicZeroV2.AssemblyInfo.cs
+Z:\Development\WPF\MusicZeroV2\obj\Debug\net48\MusicZeroV2.csproj.CoreCompileInputs.cache
+Z:\Development\WPF\MusicZeroV2\obj\Debug\net48\MusicZeroV2.exe
+Z:\Development\WPF\MusicZeroV2\obj\Debug\net48\MusicZeroV2.pdb
