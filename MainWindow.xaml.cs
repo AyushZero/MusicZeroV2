@@ -56,6 +56,9 @@ namespace MusicZeroV2
             ContentPanel.Opacity = 1;
             ContentPanel.Margin = new Thickness(0, 0, 0, 0);
             
+            // Add click handler for the title text
+            TitleText.MouseLeftButtonDown += TitleText_MouseLeftButtonDown;
+            
             // Ensure the window is visible
             Show();
             Activate();
@@ -153,6 +156,13 @@ namespace MusicZeroV2
                         // Update progress
                         ProgressBar.Maximum = track.DurationMs;
                         ProgressBar.Value = playback.ProgressMs;
+
+                        // Update popup progress if it's open
+                        if (SongInfoPopup.IsOpen)
+                        {
+                            PopupProgressBar.Maximum = track.DurationMs;
+                            PopupProgressBar.Value = playback.ProgressMs;
+                        }
 
                         // Get up next track
                         UpdateUpNext();
@@ -342,6 +352,24 @@ namespace MusicZeroV2
                     storyboard.Begin();
                 }
             };
+        }
+
+        private void TitleText_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            // Update popup content
+            PopupTitleText.Text = TitleText.Text;
+            PopupArtistText.Text = ArtistText.Text;
+            PopupUpNextText.Text = UpNextText.Text;
+            PopupProgressBar.Maximum = ProgressBar.Maximum;
+            PopupProgressBar.Value = ProgressBar.Value;
+
+            // Show popup
+            SongInfoPopup.IsOpen = true;
+        }
+
+        private void ClosePopup_Click(object sender, RoutedEventArgs e)
+        {
+            SongInfoPopup.IsOpen = false;
         }
     }
 } 
