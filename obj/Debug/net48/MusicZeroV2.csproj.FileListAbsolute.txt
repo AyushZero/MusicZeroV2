@@ -14,3 +14,4 @@ Z:\Development\WPF\MusicZeroV2\obj\Debug\net48\MusicZeroV2.AssemblyInfo.cs
 Z:\Development\WPF\MusicZeroV2\obj\Debug\net48\MusicZeroV2.csproj.CoreCompileInputs.cache
 Z:\Development\WPF\MusicZeroV2\obj\Debug\net48\MusicZeroV2.exe
 Z:\Development\WPF\MusicZeroV2\obj\Debug\net48\MusicZeroV2.pdb
+Z:\Development\WPF\MusicZeroV2\obj\Debug\net48\MusicZeroV2.sourcelink.json
