@@ -47,9 +47,14 @@ namespace MusicZeroV2
         {
             InitializeComponent();
             
-            // Position the window at the right edge, centered vertically
-            Left = SystemParameters.WorkArea.Width - 10;
-            Top = (SystemParameters.WorkArea.Height - 100) / 2;
+            // Position the window at the top of the screen
+            Left = 0;
+            Top = 0;
+            
+            // Show the content panel by default
+            ContentPanel.Visibility = Visibility.Visible;
+            ContentPanel.Opacity = 1;
+            ContentPanel.Margin = new Thickness(0, 0, 0, 0);
             
             // Ensure the window is visible
             Show();
