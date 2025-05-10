@@ -32,6 +32,11 @@ namespace MusicZeroV2
         private bool isMouseOver = false;
         private bool isAnimating = false;
         private NotifyIcon? _notifyIcon;
+        private bool isDragging = false;
+        private System.Windows.Point dragStartPoint;
+        private double initialHorizontalOffset;
+        private double initialVerticalOffset;
+        private System.Windows.Point lastMousePosition;
 
         // Win32 API imports for window styles
         private const int GWL_EXSTYLE = -20;
@@ -55,9 +60,6 @@ namespace MusicZeroV2
             ContentPanel.Visibility = Visibility.Visible;
             ContentPanel.Opacity = 1;
             ContentPanel.Margin = new Thickness(0, 0, 0, 0);
-            
-            // Add click handler for the title text
-            TitleText.MouseLeftButtonDown += TitleText_MouseLeftButtonDown;
             
             // Ensure the window is visible
             Show();
@@ -152,6 +154,14 @@ namespace MusicZeroV2
                         PlayPauseIcon.Data = playback.IsPlaying 
                             ? Geometry.Parse("M6 19h4V5H6v14zm8-14v14h4V5h-4z")  // Pause icon
                             : Geometry.Parse("M8 5v14l11-7z");  // Play icon
+
+                        // Update popup controls
+                        if (SongInfoPopup.IsOpen)
+                        {
+                            PopupPlayPauseIcon.Data = playback.IsPlaying
+                                ? Geometry.Parse("M6 19h4V5H6v14zm8-14v14h4V5h-4z")  // Pause icon
+                                : Geometry.Parse("M8 5v14l11-7z");  // Play icon
+                        }
 
                         // Update progress
                         ProgressBar.Maximum = track.DurationMs;
@@ -354,22 +364,121 @@ namespace MusicZeroV2
             };
         }
 
-        private void TitleText_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            // Update popup content
-            PopupTitleText.Text = TitleText.Text;
-            PopupArtistText.Text = ArtistText.Text;
-            PopupUpNextText.Text = UpNextText.Text;
-            PopupProgressBar.Maximum = ProgressBar.Maximum;
-            PopupProgressBar.Value = ProgressBar.Value;
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                // Update popup content
+                PopupTitleText.Text = TitleText.Text;
+                PopupArtistText.Text = ArtistText.Text;
+                PopupUpNextText.Text = UpNextText.Text;
+                PopupProgressBar.Maximum = ProgressBar.Maximum;
+                PopupProgressBar.Value = ProgressBar.Value;
 
-            // Show popup
-            SongInfoPopup.IsOpen = true;
+                // Show popup
+                SongInfoPopup.IsOpen = true;
+            }
         }
 
         private void ClosePopup_Click(object sender, RoutedEventArgs e)
         {
             SongInfoPopup.IsOpen = false;
+        }
+
+        private void Border_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            // Get the position of the mouse relative to the popup content
+            var border = (Border)sender;
+            var mousePos = e.GetPosition(border);
+            
+            // Only close if the click is outside the content area
+            if (mousePos.X < 0 || mousePos.X > border.ActualWidth ||
+                mousePos.Y < 0 || mousePos.Y > border.ActualHeight)
+            {
+                SongInfoPopup.IsOpen = false;
+            }
+        }
+
+        private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var border = (Border)sender;
+            dragStartPoint = e.GetPosition(border);
+            lastMousePosition = e.GetPosition(null);
+            initialHorizontalOffset = SongInfoPopup.HorizontalOffset;
+            initialVerticalOffset = SongInfoPopup.VerticalOffset;
+            isDragging = true;
+            border.CaptureMouse();
+        }
+
+        private void Border_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            if (isDragging)
+            {
+                var currentPosition = e.GetPosition(null);
+                var delta = currentPosition - lastMousePosition;
+                
+                SongInfoPopup.HorizontalOffset += delta.X;
+                SongInfoPopup.VerticalOffset += delta.Y;
+                
+                lastMousePosition = currentPosition;
+            }
+        }
+
+        private void Border_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            isDragging = false;
+            var border = (Border)sender;
+            border.ReleaseMouseCapture();
+        }
+
+        private async void PopupPreviousButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_spotify == null) return;
+
+            try
+            {
+                await _spotify.Player.SkipPrevious();
+            }
+            catch (Exception)
+            {
+                // Handle any errors silently
+            }
+        }
+
+        private async void PopupPlayPauseButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_spotify == null) return;
+
+            try
+            {
+                var playback = await _spotify.Player.GetCurrentPlayback();
+                if (playback?.IsPlaying == true)
+                {
+                    await _spotify.Player.PausePlayback();
+                }
+                else
+                {
+                    await _spotify.Player.ResumePlayback();
+                }
+            }
+            catch (Exception)
+            {
+                // Handle any errors silently
+            }
+        }
+
+        private async void PopupNextButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_spotify == null) return;
+
+            try
+            {
+                await _spotify.Player.SkipNext();
+            }
+            catch (Exception)
+            {
+                // Handle any errors silently
+            }
         }
     }
 } 

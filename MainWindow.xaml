@@ -13,6 +13,7 @@
         Visibility="Visible"
         MouseEnter="Window_MouseEnter"
         MouseLeave="Window_MouseLeave"
+        MouseDown="Window_MouseDown"
         KeyDown="Window_KeyDown">
     
     <Window.Resources>
@@ -187,62 +188,109 @@
                PlacementTarget="{Binding ElementName=TitleText}"
                Placement="Bottom"
                AllowsTransparency="True"
-               StaysOpen="False">
+               StaysOpen="True">
             <Border Style="{StaticResource PopupBoxStyle}"
-                    Width="300" Height="300">
+                    Width="300" Height="200"
+                    MouseLeftButtonDown="Border_MouseLeftButtonDown"
+                    MouseMove="Border_MouseMove"
+                    MouseLeftButtonUp="Border_MouseLeftButtonUp">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="4"/>
                     </Grid.RowDefinitions>
 
-                    <!-- Title and Artist -->
-                    <StackPanel Grid.Row="0" Margin="0,0,0,15">
-                        <TextBlock x:Name="PopupTitleText" 
-                                 Text="Not Playing" 
-                                 Foreground="White" 
-                                 FontSize="16" 
-                                 FontWeight="SemiBold"
-                                 TextWrapping="Wrap"/>
-                        <TextBlock x:Name="PopupArtistText" 
-                                 Text="No Artist" 
-                                 Foreground="#AAAAAA" 
-                                 FontSize="14"
-                                 TextWrapping="Wrap"/>
+                    <!-- Close Button -->
+                    <Button Grid.Row="0" 
+                            HorizontalAlignment="Right"
+                            Click="ClosePopup_Click"
+                            Width="16" Height="16"
+                            Margin="0,0,0,10"
+                            Background="Transparent"
+                            BorderThickness="0">
+                        <Path Data="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" 
+                              Fill="#666666" 
+                              Stretch="Uniform"/>
+                    </Button>
+
+                    <!-- Title, Artist and Up Next Section -->
+                    <StackPanel Grid.Row="1" Margin="15,0,15,10">
+                        <!-- Title and Artist -->
+                        <StackPanel Margin="0,0,0,15">
+                            <TextBlock x:Name="PopupTitleText" 
+                                     Text="Not Playing" 
+                                     Foreground="White" 
+                                     FontSize="16" 
+                                     FontWeight="SemiBold"
+                                     TextWrapping="NoWrap"
+                                     TextTrimming="CharacterEllipsis"
+                                     MaxWidth="270"/>
+                            <TextBlock x:Name="PopupArtistText" 
+                                     Text="No Artist" 
+                                     Foreground="#AAAAAA" 
+                                     FontSize="14"
+                                     TextWrapping="NoWrap"
+                                     TextTrimming="CharacterEllipsis"
+                                     MaxWidth="270"/>
+                        </StackPanel>
+
+                        <!-- Up Next Section -->
+                        <StackPanel>
+                            <TextBlock Text="Up Next" 
+                                     Foreground="#AAAAAA" 
+                                     FontSize="14"
+                                     Margin="0,0,0,5"/>
+                            <TextBlock x:Name="PopupUpNextText" 
+                                     Text="Nothing" 
+                                     Foreground="White" 
+                                     FontSize="14"
+                                     TextWrapping="NoWrap"
+                                     TextTrimming="CharacterEllipsis"
+                                     MaxWidth="270"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Playback Controls -->
+                    <StackPanel Grid.Row="2" 
+                               Orientation="Horizontal" 
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,10">
+                        <Button x:Name="PopupPreviousButton" 
+                                Click="PopupPreviousButton_Click"
+                                Margin="0,0,16,0">
+                            <Path Data="M6 6h2v12H6zm3.5 6l8.5 6V6z" 
+                                  Fill="White" 
+                                  Stretch="Uniform"/>
+                        </Button>
+                        <Button x:Name="PopupPlayPauseButton" 
+                                Click="PopupPlayPauseButton_Click"
+                                Margin="0,0,16,0">
+                            <Path x:Name="PopupPlayPauseIcon" 
+                                  Data="M8 5v14l11-7z" 
+                                  Fill="White" 
+                                  Stretch="Uniform"/>
+                        </Button>
+                        <Button x:Name="PopupNextButton" 
+                                Click="PopupNextButton_Click">
+                            <Path Data="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" 
+                                  Fill="White" 
+                                  Stretch="Uniform"/>
+                        </Button>
                     </StackPanel>
 
                     <!-- Progress Bar -->
-                    <ProgressBar x:Name="PopupProgressBar" 
-                               Grid.Row="1"
-                               Height="4" 
-                               Background="#33FFFFFF"
-                               Foreground="#1DB954"
-                               Margin="0,0,0,15"/>
-
-                    <!-- Up Next Section -->
-                    <StackPanel Grid.Row="2" Margin="0,0,0,15">
-                        <TextBlock Text="Up Next" 
-                                 Foreground="#AAAAAA" 
-                                 FontSize="14"
-                                 Margin="0,0,0,5"/>
-                        <TextBlock x:Name="PopupUpNextText" 
-                                 Text="Nothing" 
-                                 Foreground="White" 
-                                 FontSize="14"
-                                 TextWrapping="Wrap"/>
-                    </StackPanel>
-
-                    <!-- Close Button -->
-                    <Button Grid.Row="3" 
-                            HorizontalAlignment="Right"
-                            Click="ClosePopup_Click"
-                            Width="24" Height="24">
-                        <Path Data="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" 
-                              Fill="White" 
-                              Stretch="Uniform"/>
-                    </Button>
+                    <Border Grid.Row="3" 
+                            Background="#1E1E1E"
+                            Height="4">
+                        <ProgressBar x:Name="PopupProgressBar" 
+                                   Height="4" 
+                                   Background="#33FFFFFF"
+                                   Foreground="#1DB954"
+                                   VerticalAlignment="Bottom"
+                                   HorizontalAlignment="Stretch"/>
+                    </Border>
                 </Grid>
             </Border>
         </Popup>
